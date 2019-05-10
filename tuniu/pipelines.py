@@ -16,7 +16,7 @@ class AttractionsPipeline(object):
 	insert_sql = '''insert into attractionsItem(site_name, description) values ('{site_name}', '{description}')'''
 
 	def __init__(self):
-		self.connection = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'attractions', charset = 'utf8mb4', use_unicode = True)
+		self.connection = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'attractions', charset = 'utf8', use_unicode = True)
 		self.cursor = self.connection.cursor()
 
 	def process_item(self, item, spider):
@@ -28,6 +28,16 @@ class AttractionsPipeline(object):
 		self.connection.commit()
 		return item
 '''
+	def open_spider(self, spider):
+		self.connect = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'attractions', charset = 'utf8', use_unicode = True)
+		self.cursor = self.connect.cursor()
+        self.connect.autocommit(True)
+
+	def close_spider(self, spider):
+		self.cursor.close()
+		self.connect.close()
+		'''
+'''
 	def __del__(self):
         #关闭操作游标
 		self.cursor.close()
@@ -38,7 +48,7 @@ class RatePipeline(object):
 	insert_sql = '''insert into rateItem(site_name, rate) values ('{site_name}', '{rate}')'''
 
 	def __init__(self):
-		self.connection = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'attractions', charset = 'utf8mb4', use_unicode = True)
+		self.connection = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'attractions', charset = 'utf8', use_unicode = True)
 		self.cursor = self.connection.cursor()
 
 	def process_item(self, item, spider):
@@ -49,7 +59,17 @@ class RatePipeline(object):
 		self.cursor.execute(sql)
 		self.connection.commit()
 		return item
+	
+	'''
+	def open_spider(self, spider):
+		self.connect = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'attractions', charset = 'utf8', use_unicode = True)
+		self.cursor = self.connect.cursor()
+		self.connect.autocommit(True)
 
+	def close_spider(self, spider):
+		self.cursor.close()
+		self.connect.close()
+'''
 '''
 	def __del__(self):
         #关闭操作游标

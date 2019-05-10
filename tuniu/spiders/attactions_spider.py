@@ -10,22 +10,23 @@ class AttactionsSpiderSpider(scrapy.Spider):
 	allowed_domains = ['tuniu.com']
 	#start_urls = ['http://www.tuniu.com/place']
 
+	custom_settings = {
 
-	custome_settings = {
-	
-		"DEFAULT_REQUEST_HEADERS":{
-			
-			'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-			'accept-encoding': 'gzip, deflate, br',
-			'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
-			'Host': 'movie.douban.com',
-			'Connection': 'keep-alive',
-			'Upgrade-Insecure-Requests': '1',
-		
-		},
+    	"ITEM_PIPELINES": {
+            'tuniu.pipelines.AttractionsPipeline': 300,
+            'tuniu.pipelines.RatePipeline': 300,
+        },
+        "DEFAULT_REQUEST_HEADERS": {
+            'accept': 'application/json, text/javascript, */*; q=0.01',
+            'accept-encoding': 'gzip, deflate',
+            'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4',
+            'referer': 'https://mm.taobao.com/search_tstar_model.htm?spm=719.1001036.1998606017.2.KDdsmP',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36',
+            'x-requested-with': 'XMLHttpRequest',
+        },
+        "ROBOTSTXT_OBEY": False  # 需要忽略ROBOTS.TXT文件
+    }
 
-		"ROBOTSTXT_OBEY": False,
-	}
 
 	total_pages = 0
 	'''
@@ -116,13 +117,33 @@ class AttactionsSpiderSpider(scrapy.Spider):
 
 		print(site_name)
 		print(description)
-		print(rates)
+		
+		for rate in rates:
+			print(rate)
+
+		#save to json file
+		import json
+
+		save_json1 = {'site':site_name , 'description': description}
+		with open('save_json1.json', 'a') as file1:
+			json.dump(save_json1, file1)
+			file1.write('\n')
+
+		for rate in rates:
+			save_json2 = {'site': site_name, 'rate': rate}
+			with open('save_json2.json', 'a') as file2:
+				json.dump(save_json2, file2)
+				file2.write('\n')
+
+		'''
 
 		# store site info
 		item = AttractionsItem()
 		item['site_name'] = site_name.encode('utf-8').strip()
 		item['description'] = description.encode('utf-8').strip()
 		yield item
+
+
 
 		# rates exists
 		if len(rates) > 0:
@@ -132,3 +153,5 @@ class AttactionsSpiderSpider(scrapy.Spider):
 				item['site_name'] = site_name.encode('utf-8').strip()
 				item['rate'] = rates[i].encode('utf-8').strip()
 				yield item
+
+				'''

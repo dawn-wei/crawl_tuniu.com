@@ -21,6 +21,9 @@ NEWSPIDER_MODULE = 'tuniu.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+FEED_EXPORT_ENCODING = 'utf-8'
+
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -112,18 +115,25 @@ USER_AGENTS_LIST = [
     "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10"
 ]
 
-
+'''
 DOWNLOADER_MIDDLEWARES = {
-	'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
-    'random_useragent.RandomUserAgentMiddleware': 400,
+	#'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+	#'tuniu.middlewares.RandomUserAgent': 513,
+
+    #'random_useragent.RandomUserAgentMiddleware': 400,
 	#'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware':123,
 	#'tuniu.middlewares.IPPOOlS' : 125,
 	
+	# ip pool
 	'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware':None,  
 	'tuniu.middlewares.ProxyMiddleWare':125,  
 	'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware':None,
 	
+	# ua pool
+	'tuniu.middlewares.RandomUserAgentMiddleware': 333,
+
 }
+'''
 
 COOKIES_ENABLED = False
 
